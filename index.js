@@ -1,26 +1,32 @@
+const config = require('config');
+const Joi = require('joi');
+Joi.objectId = require('joi-objectid')(Joi);
+const mongoose = require('mongoose');
+const genres = require('./routes/genres');
+const customers = require('./routes/customers');
+const movies = require('./routes/movies');
+const rentals = require('./routes/rentals');
+const users = require('./routes/users');
+const auth = require('./routes/auth');
+const express = require('express');
+const app = express();
 
-// Load core modules
-import express from "express";
-import mongoose from "mongoose";
-import dotenv from "dotenv";
+if (!config.get('jwtPrivateKey')) {
+  console.error('FATAL ERROR: jwtPrivateKey is not defined.');
+  process.exit(1);
+}
 
-// Enable reading env varibles
-dotenv.config();
+mongoose.connect('mongodb://localhost/vidly')
+  .then(() => console.log('Connected to MongoDB...'))
+  .catch(err => console.error('Could not connect to MongoDB...'));
 
-// Connect to Db
-mongoose.connect(process.env.DB_URL, { useNewUrlParser : true }).then(res => console.log("Connected!")).catch(er => console.log(er));
+app.use(express.json());
+app.use('/api/genres', genres);
+app.use('/api/customers', customers);
+app.use('/api/movies', movies);
+app.use('/api/rentals', rentals);
+app.use('/api/users', users);
+app.use('/api/auth', auth);
 
-// Initialize express server
-const server = express();
-
-// Setting up middlewares
-server.use(express.json());
-
-
-// Fireup server and provide port
-const PORT = process.env.PORT;
-server.listen(PORT, event => console.log("Started!"));
-
-
-
-
+const port = process.env.PORT || 3000;
+app.listen(port, () => console.log(`Listening on port ${port}...`));
