@@ -8,16 +8,8 @@ const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
 
-router.get("/", (req,res) => {
-  res.json({ msg :"Sending users!" });
-})
-
 router.get('/me', auth, async (req, res) => {
-
-  // Fetch logged in user
   const user = await User.findById(req.user._id).select('-password');
-
-  // Send user back
   res.send(user);
 });
 
