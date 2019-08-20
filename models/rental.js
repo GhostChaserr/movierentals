@@ -56,6 +56,8 @@ const rentalSchema = new mongoose.Schema({
   }
 });
 
+
+// Custom function to find rental with customer and movie id
 rentalSchema.statics.lookup = function(customerId, movieId) {
   return this.findOne({
     'customer._id': customerId,
@@ -63,9 +65,14 @@ rentalSchema.statics.lookup = function(customerId, movieId) {
   });
 }
 
+
+// Custom function to generate time
 rentalSchema.methods.return = function() {
+
+  // Sets date of return
   this.dateReturned = new Date();
 
+  // Calculates rental fee based on time passed
   const rentalDays = moment().diff(this.dateOut, 'days');
   this.rentalFee = rentalDays * this.movie.dailyRentalRate;
 }
