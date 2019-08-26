@@ -1,3 +1,5 @@
+
+// Core libs
 const auth = require('../middleware/auth');
 const jwt = require('jsonwebtoken');
 const config = require('config');
@@ -11,13 +13,19 @@ const router = express.Router();
 
 // Fetch current user - except password
 router.get('/me', auth, async (req, res) => {
+
+  // Find user By Given ID.
   const user = await User.findById(req.user._id).select('-password');
+
+  // Send user back to user.
   res.send(user);
 });
 
 
 // Register new user
 router.post('/', async (req, res) => {
+
+  // Validate request data.
   const { error } = validate(req.body); 
   if (error) return res.status(400).send(error.details[0].message);
 

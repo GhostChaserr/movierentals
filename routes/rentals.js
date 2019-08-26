@@ -10,7 +10,6 @@ const router = express.Router();
 // Initializing fawn to perform TWO PHASE COMMITS
 Fawn.init(mongoose);
 
-
 // Fetch rentals.
 router.get('/', async (req, res) => {
 
