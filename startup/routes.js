@@ -1,3 +1,5 @@
+
+// Loading app routes
 const express = require('express');
 const genres = require('../routes/genres');
 const customers = require('../routes/customers');
